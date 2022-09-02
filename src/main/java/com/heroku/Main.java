@@ -1,7 +1,6 @@
 package com.heroku;
 
 import java.sql.*;
-import java.util.Optional;
 
 public class Main {
 
@@ -13,7 +12,6 @@ public class Main {
     public static void main(String[] args) throws SQLException {
         System.out.println("Start program!");
         final Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
-        System.out.println(connection.getCatalog());
         System.out.println("Creating table in given database...");
         String sql = "CREATE TABLE PHONE " +
                 "(id VARCHAR(255), " +
@@ -22,10 +20,12 @@ public class Main {
                 " count INTEGER, " +
                 " PRIMARY KEY ( id ))";
 
-        try(final PreparedStatement statement = connection.prepareStatement(sql)) {
-                System.out.println("Table created!");
-                save(connection);
-                printById("123", connection);
+
+        try (final PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.execute();
+            System.out.println("Table created!");
+            save(connection);
+            printById("123", connection);
         }
     }
 
