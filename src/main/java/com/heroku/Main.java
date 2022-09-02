@@ -30,7 +30,7 @@ public class Main {
     }
 
     private static void save(Connection connection) {
-        String sql = "INSERT INTO \"public\".\"PHONE\" (id, title, model, count) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO \"PHONE\" (id, title, model, count) VALUES (?, ?, ?, ?)";
         try (final PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, "123");
             statement.setString(2, "Title - 1");
@@ -43,7 +43,7 @@ public class Main {
     }
 
     private static void printById(String id, Connection connection) {
-        String sql = "SELECT * FROM \"public\".\"PHONE\" WHERE id = ?";
+        String sql = "SELECT * FROM \"PHONE\" WHERE id = ?";
 
         try (final PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, id);
