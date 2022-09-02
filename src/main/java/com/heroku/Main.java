@@ -22,7 +22,7 @@ public class Main {
 
 
         try (final PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.execute();
+            statement.executeUpdate();
             System.out.println("Table created!");
             save(connection);
             printById("123", connection);
@@ -36,7 +36,7 @@ public class Main {
             statement.setString(2, "Title - 1");
             statement.setString(3, "Model - 1");
             statement.setInt(4, 3);
-            statement.execute();
+            statement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
