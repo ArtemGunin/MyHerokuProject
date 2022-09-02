@@ -1,9 +1,7 @@
 package com.heroku;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.Optional;
 
 public class Main {
 
@@ -17,7 +15,7 @@ public class Main {
         final Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
         System.out.println(connection.getCatalog());
         System.out.println("Creating table in given database...");
-        String sql = "CREATE TABLE REGISTRATION " +
+        String sql = "CREATE TABLE PHONE " +
                 "(id VARCHAR(255), " +
                 " title VARCHAR(255), " +
                 " model VARCHAR(255), " +
@@ -25,11 +23,39 @@ public class Main {
                 " PRIMARY KEY ( id ))";
 
         try(final PreparedStatement statement = connection.prepareStatement(sql)) {
-            if (statement.execute()) {
                 System.out.println("Table created!");
-            } else {
-                System.out.println("Table not created!");
+                save(connection);
+                printById("123", connection);
+        }
+    }
+
+    private static void save(Connection connection) {
+        String sql = "INSERT INTO \"public\".\"PHONE\" (id, title, model, count) VALUES (?, ?, ?, ?)";
+        try (final PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, "123");
+            statement.setString(2, "Title - 1");
+            statement.setString(3, "Model - 1");
+            statement.setInt(4, 3);
+            statement.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static void printById(String id, Connection connection) {
+        String sql = "SELECT * FROM \"public\".\"PHONE\" WHERE id = ?";
+
+        try (final PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, id);
+            final ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                System.out.println(resultSet.getString("id"));
+                System.out.println(resultSet.getString("title"));
+                System.out.println(resultSet.getString("model"));
+                System.out.println(resultSet.getInt("count"));
             }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 }
